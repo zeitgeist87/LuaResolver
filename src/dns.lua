@@ -14,13 +14,12 @@
 -- You should have received a copy of the GNU Lesser General Public License
 -- along with this program. If not, see <http://www.gnu.org/licenses/>.
 
---- ---------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 -- A simple DNS resolver written in Lua. It doesn't need bit operations
 -- and is therefore compatible with Lua5.1, Lua5.2 and LuaJIT. The
 -- only dependency is LuaSocket.
 -- 
 -- @module Dns
--- ----------------------------------------------------------------------------
 
 local socket = require "socket"
 
@@ -81,9 +80,10 @@ end
 
 local dnsCache = {}
 
---- ---------------------------------------------------------------------------
--- Should be called periodically to cleanup the internal DNS Cache
--- ----------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Should be called periodically to cleanup the internal DNS cache
+-- @function [parent=#Dns] cleanup
+
 function Dns.cleanup()
 	for _, v in pairs(dnsCache) do
 		for domain, recs in pairs(v) do
@@ -452,19 +452,20 @@ local function resolveSimple(domainName, recordType, server, timeout)
 	return rec
 end
 
---- ---------------------------------------------------------------------------
--- resolveRaw() starts a DNS query for the specified domain name and record
+-------------------------------------------------------------------------------
+-- `resolveRaw` starts a DNS query for the specified domain name and record
 -- type. It either uses a set of default servers or the servers provided
--- with the servers parameter. It returns a table with the parsed response
+-- with the `servers` parameter. It returns a table with the parsed response
 -- or an error message
 -- 
--- @param domainName	domain to be resolved
--- @param recordType	type of record to be queried (defaults to "A")
--- @param timeout		connection timeout in seconds (defaults to 5)
--- @param servers		table of servers (can be nil)
--- @return parsed DNS response with complete header and all flags intact
--- @return errmsg
--- ----------------------------------------------------------------------------
+-- @function [parent=#Dns] resolveRaw
+-- @param #string domainName	domain to be resolved
+-- @param #string recordType	type of record to be queried (defaults to "A")
+-- @param #number timeout		connection timeout in seconds (defaults to 5)
+-- @param #table servers		table of servers (can be nil)
+-- @return #table parsed DNS response with complete header and all flags intact
+-- @return #nil,#string errmsg
+
 function Dns.resolveRaw(domainName, recordType, timeout, servers)
 	local rec, errmsg
 	
@@ -483,18 +484,19 @@ function Dns.resolveRaw(domainName, recordType, timeout, servers)
 	return nil, errmsg
 end
 
---- ---------------------------------------------------------------------------
--- resolve() works exactly the same as resolveRaw(), but it flattens the
+-------------------------------------------------------------------------------
+-- `resolve` works exactly the same as `resolveRaw`, but it flattens the
 -- structure of the returned object and strips unnecessary data, like the
 -- header. It returns a simple sorted list of resource records.
 -- 
--- @param domainName	domain to be resolved
--- @param recordType	type of record to be queried (defaults to "A")
--- @param timeout		connection timeout in seconds (defaults to 5)
--- @param servers		table of servers (can be nil)
--- @return sorted list of resource records
--- @return errmsg
--- ----------------------------------------------------------------------------
+-- @function [parent=#Dns] resolve
+-- @param #string domainName	domain to be resolved
+-- @param #string recordType	type of record to be queried (defaults to "A")
+-- @param #number timeout		connection timeout in seconds (defaults to 5)
+-- @param #table servers		table of servers (can be nil)
+-- @return #table sorted list of resource records
+-- @return #nil,#string errmsg
+
 function Dns.resolve(domainName, recordType, timeout, servers)
 	local rec, errmsg = Dns.resolveRaw(domainName, recordType, servers, timeout)
 

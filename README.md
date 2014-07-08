@@ -130,7 +130,7 @@ cleanup
 -----
 `syntax: Dns.cleanup()`
 
-Should be called periodically to cleanup the internal DNS Cache
+Should be called periodically to cleanup the internal DNS cache
 
 ## TODO
 
