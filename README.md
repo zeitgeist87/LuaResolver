@@ -1,4 +1,4 @@
-LuaDNS
+LuaResolver
 ======
 
 A simple DNS resolver written entirely in Lua. It doesn't need bit operations
@@ -7,13 +7,15 @@ only dependency is LuaSocket.
 
 ## Usage
 
-The resolve() function returns a sorted table with resource records or nil and
+The `Resolver:resolve()` method returns a sorted table with resource records or nil and
 an error message.
 
 ```lua
-local dns = require "dns"
+local Resolver = require "dns.resolver"
+local r = Resolver.new({"213.73.91.35"}, 2)
+r:addServer("85.214.20.141")
 
-local recs, errmsg = dns.resolve("google.com", "*")
+local recs, errmsg = r:resolve("google.com", "*")
 if not errmsg then
     for _, v in ipairs(recs) do
         print(v.name, v.type, v.class, v.content)
@@ -21,7 +23,7 @@ if not errmsg then
 end
 ```
 
-The resolveRaw() function returns more data about the DNS response and also
+The `Resolver:resolveRaw()` method returns more data about the DNS response and also
 includes the raw data of the resource records. The returned table looks
 something like this:
 
@@ -37,7 +39,7 @@ resultOfResolveRaw = {
             recursionAvailable = true,
         },
         opCode,
-        resCode, -- error code
+        errCode, -- error code
         ttl,     -- time to live in seconds
         timeout, -- os.time() + ttl
     },
@@ -53,7 +55,7 @@ resultOfResolveRaw = {
             rawdata
         }
     },                -- resource records
-    nameservers = {}, -- resource records for the authoritative ns
+    authorities = {}, -- resource records for the authoritative ns
     additionals = {}, -- additional resource records
 }
 ```
@@ -90,30 +92,38 @@ google.com	TXT	IN	v=spf1 include:_spf.google.com ip4:216.73.93.70/31 ip4:216.73.
 
 ## Documentation
 
+new
+-----
+`syntax: r = Resolver.new(servers, timeout)`
+
+Creates a new instance of `Resolver`.
+
+* `servers`
+	list of DNS servers
+* `timeout`
+	connection timeout
+
 resolveRaw
 -----
-`syntax: resp, err = Dns.resolveRaw(domainName, recordType, timeout, servers)`
+`syntax: resp, err = Resolver:resolveRaw(domainName, recordType)`
 
 Starts a DNS query for the specified domain name and record
-type. It either uses a set of default servers or the servers provided
-with the `servers` parameter. It returns a table with the parsed response
-or nil and an error message
+type. It iterates through the list of servers provided on instanciation or
+through `addServer` and queries each one for the `domainName` and
+`recordType` until one of them responds with a successful answer.
+It returns a table with the parsed response or nil and an error message.
 
 
 * `domainName`
 	domain to be resolved
 * `recordType`
 	type of record to be queried (defaults to "A")
-* `timeout`
-	connection timeout in seconds (defaults to 5)
-* `servers`
-	table of servers (can be nil)
 
-resolveRaw
+resolve
 -----
-`syntax: resp, err = Dns.resolve(domainName, recordType, timeout, servers)`
+`syntax: resp, err = Resolver:resolve(domainName, recordType)`
 
-resolve() works exactly the same as resolveRaw(), but it flattens the
+Works exactly the same as `resolveRaw`, but it flattens the
 structure of the returned object and strips unnecessary data, like the
 header. It returns a simple sorted list of resource records.
 
@@ -121,14 +131,20 @@ header. It returns a simple sorted list of resource records.
 	domain to be resolved
 * `recordType`
 	type of record to be queried (defaults to "A")
-* `timeout`
-	connection timeout in seconds (defaults to 5)
-* `servers`
-	table of servers (can be nil)
+
+
+addServer
+-----
+`syntax: Resolver:addServer(server)`
+
+Adds a DNS server to the list of servers
+
+* `server`
+	DNS server
 
 cleanup
 -----
-`syntax: Dns.cleanup()`
+`syntax: Resolver:cleanup()`
 
 Should be called periodically to cleanup the internal DNS cache
 

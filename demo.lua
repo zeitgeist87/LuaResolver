@@ -1,4 +1,4 @@
-local dns = require "dns"
+local Resolver = require "dns.resolver"
 
 local function main(domain, type)
 	type = type or "*"
@@ -7,7 +7,10 @@ local function main(domain, type)
 		return
 	end
 	
-	local rec, errmsg = dns.resolve(domain, type)
+	local r = Resolver.new({"213.73.91.35"}, 2)
+	r:addServer("85.214.20.141")
+	
+	local rec, errmsg = r:resolve(domain, type)
 	if errmsg then
 		print(errmsg)
 		return
