@@ -142,6 +142,20 @@ Adds a DNS server to the list of servers
 * `server`
 	DNS server
 
+
+enableTcp
+-----
+`syntax: Resolver:enableTcp()`
+
+Enable tcp resolution
+
+
+disableCache
+-----
+`syntax: Resolver:disableCache()`
+
+Disable caching feature
+
 cleanup
 -----
 `syntax: Resolver:cleanup()`
@@ -150,5 +164,6 @@ Should be called periodically to cleanup the internal DNS cache
 
 ## TODO
 
-* Support for TCP connections
+* Fall back to tcp when udp truncate
+* Recursion parameter
 * Support for more record types
