@@ -93,6 +93,7 @@ function Resolver:cleanup()
 end
 
 function Resolver:query(domainName, recordType, server)
+	print(recordType)
 	if not Parser.recordTypes[recordType] then
 		return nil, "Unkown record type (or not implemented)"
 	end
@@ -116,7 +117,7 @@ function Resolver:query(domainName, recordType, server)
 	local query = string.char(math.floor(currId / 256), currId % 256, 1, 
 		0, 0, 1, 0, 0, 0, 0, 0, 0)
 
-	for word in domainName:gmatch("%w+") do
+	for word in domainName:gmatch("[%w%-]+") do
 		if word:len() > 63 then
 			return nil, "Invalid domain: Labels are too long"
 		end
