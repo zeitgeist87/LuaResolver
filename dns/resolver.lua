@@ -1,16 +1,16 @@
 -- LuaResolver - A simple DNS resolver written in Lua
 -- Copyright (C) 2014 Andreas Rohner
--- 
+--
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
 -- the Free Software Foundation, either version 3 of the License, or
 -- (at your option) any later version.
--- 
+--
 -- This program is distributed in the hope that it will be useful,
 -- but WITHOUT ANY WARRANTY; without even the implied warranty of
 -- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 -- GNU Lesser General Public License for more details.
--- 
+--
 -- You should have received a copy of the GNU Lesser General Public License
 -- along with this program. If not, see <http://www.gnu.org/licenses/>.
 
@@ -18,7 +18,7 @@
 -- A simple DNS resolver written in Lua. It doesn't need bit operations
 -- and is therefore compatible with Lua5.1, Lua5.2 and LuaJIT. The
 -- only dependency is LuaSocket.
--- 
+--
 -- @module Resolver
 
 local socket = require "socket"
@@ -29,7 +29,7 @@ Resolver.__index = Resolver
 
 -------------------------------------------------------------------------------
 -- Creates a new instance of `Resolver`.
--- 
+--
 -- @function [parent=#Resolver] new
 -- @param #table servers	list of DNS servers
 -- @param #number timeout	connection timeout
@@ -41,7 +41,7 @@ end
 
 -------------------------------------------------------------------------------
 -- Adds a DNS server to the list of servers
--- 
+--
 -- @function [parent=#Resolver] addServer
 -- @param #string server	DNS server
 
@@ -199,7 +199,7 @@ end
 -- through `addServer` and queries each one for the `domainName` and
 -- `recordType` until one of them responds with a successful answer.
 -- It returns a table with the parsed response or nil and an error message.
--- 
+--
 -- @function [parent=#Resolver] resolveRaw
 -- @param #string domainName	domain to be resolved
 -- @param #string recordType	type of record to be queried (defaults to "A")
@@ -225,7 +225,7 @@ end
 -- Works exactly the same as `resolveRaw`, but it flattens the
 -- structure of the returned object and strips unnecessary data, like the
 -- header. It returns a simple sorted list of resource records.
--- 
+--
 -- @function [parent=#Resolver] resolve
 -- @param #string domainName	domain to be resolved
 -- @param #string recordType	type of record to be queried (defaults to "A")

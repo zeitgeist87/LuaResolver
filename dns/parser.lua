@@ -1,23 +1,23 @@
 -- LuaResolver - A simple DNS resolver written in Lua
 -- Copyright (C) 2014 Andreas Rohner
--- 
+--
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU Lesser General Public License as published by
 -- the Free Software Foundation, either version 3 of the License, or
 -- (at your option) any later version.
--- 
+--
 -- This program is distributed in the hope that it will be useful,
 -- but WITHOUT ANY WARRANTY; without even the implied warranty of
 -- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 -- GNU Lesser General Public License for more details.
--- 
+--
 -- You should have received a copy of the GNU Lesser General Public License
 -- along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -------------------------------------------------------------------------------
 -- A parser for DNS responses. It takes a string buffer of the DNS response
 -- as input and returns a table with the parsed results.
--- 
+--
 -- @module Parser
 
 local Parser = {}
@@ -89,7 +89,7 @@ Parser.classTypes = classTypes
 
 -------------------------------------------------------------------------------
 -- Creates a new instance of Parser.
--- 
+--
 -- @function [parent=#Parser] new
 -- @param #string buf	a buffer containing the response from a DNS server
 -- @return new instance of Parser
@@ -335,7 +335,7 @@ end
 
 -------------------------------------------------------------------------------
 -- Parses the input data and returns the result as a lua table
--- 
+--
 -- @function [parent=#Parser] parse
 -- @param #string buf	a buffer containing the response from a DNS server
 -- @return #table		parsed result
