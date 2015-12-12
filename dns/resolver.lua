@@ -50,6 +50,14 @@ function Resolver:addServer(server)
 	servers[#servers + 1] = server
 end
 
+------------------------------------------------------------------------------
+--
+-- @function [parent=#Resolver] disableCache
+
+function Resolver:disableCache()
+	self.cache = nil
+end
+
 local transId = 0
 local function getTransId()
 	if transId > 65535 then
@@ -64,11 +72,13 @@ end
 -- @function [parent=#Resolver] cleanup
 
 function Resolver:cleanup()
-	for _, types in pairs(self.cache) do
-		for type, rec in pairs(types) do
-			if os.time() > rec.header.timeout then
-				types[type] = nil
-				break
+	if (self.cache) then
+		for _, types in pairs(self.cache) do
+			for type, rec in pairs(types) do
+				if os.time() > rec.header.timeout then
+					types[type] = nil
+					break
+				end
 			end
 		end
 	end
@@ -79,8 +89,8 @@ function Resolver:query(domainName, recordType, server)
 	if not Parser.recordTypes[recordType] then
 		return nil, "Unkown record type (or not implemented)"
 	end
-	
-	if self.cache[domainName] and self.cache[domainName][recordType] then
+
+	if self.cache and self.cache[domainName] and self.cache[domainName][recordType] then
 		local rec = self.cache[domainName][recordType]
 
 		if os.time() <= rec.header.timeout then
@@ -141,8 +151,10 @@ function Resolver:query(domainName, recordType, server)
 		return nil, "Server returned error " .. rec.header.errCode
 	end
 
-	self.cache[domainName] = self.cache[domainName] or {}
-	self.cache[domainName][recordType] = rec
+	if (self.cache) then
+		self.cache[domainName] = self.cache[domainName] or {}
+		self.cache[domainName][recordType] = rec
+	end
 	return rec
 end
 
