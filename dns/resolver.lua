@@ -21,10 +21,7 @@
 --
 -- @module Resolver
 
-
-if not socket then
-	socket = require "socket"
-end
+local socket = require "socket"
 local Parser = require "dns.parser"
 
 local Resolver = {}
@@ -96,6 +93,7 @@ function Resolver:cleanup()
 end
 
 function Resolver:query(domainName, recordType, server)
+	print(recordType)
 	if not Parser.recordTypes[recordType] then
 		return nil, "Unkown record type (or not implemented)"
 	end
