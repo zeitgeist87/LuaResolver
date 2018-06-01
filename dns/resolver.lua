@@ -93,7 +93,6 @@ function Resolver:cleanup()
 end
 
 function Resolver:query(domainName, recordType, server)
-	print(recordType)
 	if not Parser.recordTypes[recordType] then
 		return nil, "Unkown record type (or not implemented)"
 	end
@@ -149,7 +148,7 @@ function Resolver:query(domainName, recordType, server)
 
 	s:settimeout(self.timeout)
 
-	s:send(query)
+	r, err = s:send(query)
 	if err then
 		return nil, "Socket send error : " .. err
 	end
