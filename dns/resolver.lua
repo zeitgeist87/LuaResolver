@@ -148,7 +148,7 @@ function Resolver:query(domainName, recordType, server)
 
 	s:settimeout(self.timeout)
 
-	s:send(query)
+	r, err = s:send(query)
 	if err then
 		return nil, "Socket send error : " .. err
 	end
