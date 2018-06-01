@@ -93,7 +93,6 @@ function Resolver:cleanup()
 end
 
 function Resolver:query(domainName, recordType, server)
-	print(recordType)
 	if not Parser.recordTypes[recordType] then
 		return nil, "Unkown record type (or not implemented)"
 	end
